@@ -34,12 +34,15 @@ allprojects {
 }
 
 repositories {
+    jcenter()
     mavenCentral()
+    maven { url "http://jump-pilot.sourceforge.net/repository" }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compile 'org.jetbrains:annotations:15.0'
+    compile 'org.apache.commons:commons-imaging:1.0-SNAPSHOT'
 
     compile('com.github.alexm4q:futurutils:master-SNAPSHOT') { changing = true }
 }
