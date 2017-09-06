@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
-<BorderPane fx:controller="com.futur.infoseq.controllers.StartLayoutController" maxHeight="-Infinity"
-            maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.futur.infoseq.controllers.StartLayoutController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
@@ -19,4 +17,14 @@
             </Menu>
         </MenuBar>
     </top>
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <Tab closable="false" text="Криптография">
+                <fx:include source="cryptography_layout.fxml"/>
+            </Tab>
+            <Tab closable="false" text="Стеганография">
+                <fx:include source="stenography_layout.fxml"/>
+            </Tab>
+        </TabPane>
+    </center>
 </BorderPane>

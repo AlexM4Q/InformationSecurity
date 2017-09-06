@@ -1,73 +1,50 @@
 package com.futur.infoseq.security.steno;
 
+import com.futur.common.helpers.ReflectionHelper;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
-import org.apache.commons.imaging.Imaging;
-import org.apache.commons.imaging.common.RationalNumber;
-import org.apache.commons.imaging.formats.jpeg.JpegImageMetadata;
-import org.apache.commons.imaging.formats.jpeg.exif.ExifRewriter;
-import org.apache.commons.imaging.formats.tiff.TiffImageMetadata;
 import org.apache.commons.imaging.formats.tiff.constants.ExifTagConstants;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputDirectory;
+import org.apache.commons.imaging.formats.tiff.write.TiffOutputField;
 import org.apache.commons.imaging.formats.tiff.write.TiffOutputSet;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
 
 public final class ImageExifForString extends ImageExif<String, File> {
 
-    @NotNull
-    private final File container;
-    @NotNull
-    private final File destination;
-
-    public ImageExifForString(@NotNull final File container, @NotNull final File destination) {
-        this.container = container;
-        this.destination = destination;
+    public ImageExifForString(@NotNull final File container, @NotNull final File destination) throws ImageWriteException, ImageReadException, IOException {
+        super(container, destination);
     }
 
     @NotNull
     @Override
-    public File encode(@NotNull final String input) {
-        try (@NotNull final OutputStream os = new BufferedOutputStream(new FileOutputStream(destination))) {
+    public File encode(@NotNull final String input) throws ImageWriteException, ImageReadException, IOException {
+        @NotNull final TiffOutputSet outputSet = initOutputSet();
+        @NotNull final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
 
-            @Nullable TiffOutputSet outputSet = null;
+        exifDirectory.removeField(ExifTagConstants.EXIF_TAG_USER_COMMENT);
+        exifDirectory.add(ExifTagConstants.EXIF_TAG_USER_COMMENT, input);
 
-            @Nullable final JpegImageMetadata jpegMetadata = (JpegImageMetadata) Imaging.getMetadata(container);
-            if (jpegMetadata != null) {
-                @Nullable final TiffImageMetadata exif = jpegMetadata.getExif();
-                if (exif != null) {
-                    outputSet = exif.getOutputSet();
-                }
-            }
-
-            if (null == outputSet) {
-                outputSet = new TiffOutputSet();
-            }
-
-            @NotNull final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
-            exifDirectory.removeField(ExifTagConstants.EXIF_TAG_APERTURE_VALUE);
-            exifDirectory.add(ExifTagConstants.EXIF_TAG_APERTURE_VALUE, new RationalNumber(3, 10));
-
-//            exifDirectory.add(new TagInfoAscii());
-
-            final double longitude = -74.0;
-            final double latitude = 40 + 43 / 60.0;
-            outputSet.setGPSInDegrees(longitude, latitude);
-
-            new ExifRewriter().updateExifMetadataLossless(container, os, outputSet);
-        } catch (IOException | ImageWriteException | ImageReadException e) {
-            e.printStackTrace();
-        }
+        save(outputSet);
 
         return destination;
     }
 
     @NotNull
     @Override
-    public String decode(@NotNull final File output) {
-        return null;
+    public String decode(@NotNull final File output) throws ImageWriteException, ImageReadException, IOException, NoSuchFieldException, IllegalAccessException {
+        @NotNull final TiffOutputSet outputSet = initOutputSet();
+        @NotNull final TiffOutputDirectory exifDirectory = outputSet.getOrCreateExifDirectory();
+        @NotNull final TiffOutputField userCommentField = exifDirectory.findField(ExifTagConstants.EXIF_TAG_USER_COMMENT);
+
+        @NotNull final Field bytesField = ReflectionHelper.getField(TiffOutputField.class, "bytes");
+        @NotNull final byte[] bytes = (byte[]) bytesField.get(userCommentField);
+        @NotNull final String userComment = new String(bytes);
+
+        return userComment.substring("ASCII".length(), userComment.length());
     }
 
 }
