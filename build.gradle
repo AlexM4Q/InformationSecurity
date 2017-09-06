@@ -1,0 +1,91 @@
+apply plugin: 'application'
+
+description = "Information Security Project"
+mainClassName = "StartApplication"
+
+applicationDefaultJvmArgs += ["-Xms512m",
+                              "-Xmx1024m",
+                              "-Xmn256M",
+                              "-ea",
+                              "-Dsun.io.useCanonCaches=false",
+                              "-XX:+AggressiveOpts",
+                              "-XX:+UseConcMarkSweepGC",
+                              "-XX:+HeapDumpOnOutOfMemoryError",
+                              "-XX:-OmitStackTraceInFastThrow",
+                              "-XX:SoftRefLRUPolicyMSPerMB=50",
+                              "-XX:ReservedCodeCacheSize=240m",
+                              "-XX:MaxJavaStackTraceDepth=-1"]
+
+allprojects {
+    group = 'InformationSecurity'
+    version = null
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    compileJava.options.encoding = 'UTF-8'
+
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'org.jetbrains:annotations:15.0'
+
+    compile('com.github.alexm4q:futurutils:master-SNAPSHOT') { changing = true }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
+configure(':InformationSecurity') {
+    apply plugin: 'distribution'
+    apply plugin: 'application'
+
+    task copyBuilds(type: Copy) {
+        from "${project.buildDir}\\install\\"
+        into "${project.rootDir}\\build\\"
+    }
+
+    compileJava.shouldRunAfter clean
+    installDist.dependsOn clean
+    installDist.finalizedBy copyBuilds
+
+    def libsResources = "$project.projectDir\\libs\\"
+    def externalResources = "$project.projectDir\\externalResources\\"
+
+    task copyInternalResources(type: Copy) {
+        from libsResources
+        from externalResources
+        into "$project.buildDir\\classes\\resources\\"
+    }
+
+    task copyBuildResources(type: Copy) {
+        from libsResources
+        from externalResources
+        into "${project.buildDir}\\install\\${project.name}\\res"
+    }
+
+    copyBuilds.finalizedBy copyInternalResources
+    copyBuilds.finalizedBy copyBuildResources
+}
+
+task startApp(type: Exec) {
+    commandLine = ['cmd', '/c', "build\\install\\${project.name}\\bin\\${project.name}.bat"]
+}
