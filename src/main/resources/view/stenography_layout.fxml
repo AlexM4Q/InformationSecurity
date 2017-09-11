@@ -1,7 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.futur.infoseq.controllers.StenographyLayoutController">
-
-</AnchorPane>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox spacing="5.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.futur.infoseq.controllers.StenographyLayoutController">
+    <GridPane hgap="5.0" vgap="5.0" VBox.vgrow="ALWAYS">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES" />
+        </rowConstraints>
+        <TextField fx:id="containerPath_TF" GridPane.columnIndex="1" />
+        <TextField fx:id="path_TF" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+        <Label text="Контейнер" />
+        <Label text="Путь" GridPane.rowIndex="1" />
+        <Button mnemonicParsing="false" onAction="#containerPath_B_action" text=".." GridPane.columnIndex="2" />
+        <Button mnemonicParsing="false" onAction="#path_B_action" text="..." GridPane.columnIndex="2" GridPane.rowIndex="1" />
+    </GridPane>
+    <Accordion fx:id="processingTypeSelector_A" VBox.vgrow="ALWAYS">
+        <panes>
+            <TitledPane animated="false" text="Текст">
+                <TextArea fx:id="processingText_TA" />
+            </TitledPane>
+            <TitledPane animated="false" text="Файл">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </TitledPane>
+        </panes>
+    </Accordion>
+    <HBox alignment="CENTER_RIGHT" spacing="5.0">
+        <Button mnemonicParsing="false" onAction="#decode_B_action" text="Расшифровать" />
+        <Button mnemonicParsing="false" onAction="#encode_B_action" text="Зашифровать" />
+    </HBox>
+</VBox>
