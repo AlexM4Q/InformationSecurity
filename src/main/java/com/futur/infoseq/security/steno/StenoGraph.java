@@ -5,7 +5,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 
-public abstract class StenoGraph<I> implements SecurityGraph<I, File> {
+public abstract class StenoGraph<I> implements SecurityGraph<I, File[]> {
+
+    @NotNull
+    protected static final String FILENAME_PREFIX = "top_secrets_";
 
     @NotNull
     protected final File container;

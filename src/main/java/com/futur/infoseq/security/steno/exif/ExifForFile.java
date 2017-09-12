@@ -3,7 +3,6 @@ package com.futur.infoseq.security.steno.exif;
 import org.apache.commons.imaging.ImageReadException;
 import org.apache.commons.imaging.ImageWriteException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,27 +12,23 @@ import java.util.UUID;
 
 public final class ExifForFile extends Exif<File> {
 
-    public ExifForFile(@NotNull final File container, @NotNull final File destination) throws IOException, ImageReadException, ImageWriteException {
+    public ExifForFile(@NotNull final File container, @NotNull final File destination) {
         super(container, destination);
     }
 
     @NotNull
     @Override
-    public File encode(@NotNull final File input) throws IOException, ImageWriteException, ImageReadException {
-        write(Files.readAllBytes(input.toPath()));
-        return destination;
+    public File[] encode(@NotNull final File input) throws IOException, ImageWriteException, ImageReadException {
+        return write(Files.readAllBytes(input.toPath()));
     }
 
     @NotNull
     @Override
-    public File decode(@NotNull final File output) throws ImageWriteException, IOException, NoSuchFieldException, IllegalAccessException, ImageReadException {
-        @Nullable final byte[] bytes = read();
+    public File decode(@NotNull final File... output) throws ImageWriteException, IOException, NoSuchFieldException, IllegalAccessException, ImageReadException {
         @NotNull final File file = new File(UUID.randomUUID().toString());
 
-        if (bytes != null) {
-            try (@NotNull final FileOutputStream fos = new FileOutputStream(file)) {
-                fos.write(bytes);
-            }
+        try (@NotNull final FileOutputStream fos = new FileOutputStream(file)) {
+            fos.write(read());
         }
 
         return file;

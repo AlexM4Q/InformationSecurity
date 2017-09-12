@@ -1,0 +1,14 @@
+.menu:hover,
+.menu:showing,
+.menu-item:hover {
+    -fx-background-color: rgb(46, 139, 87);
+}
+
+.context-menu {
+    -fx-background-color: #3C3F41;
+    -fx-opacity: 0.75;
+}
+
+.menu-item .label {
+    -fx-text-fill: WHITE;
+}

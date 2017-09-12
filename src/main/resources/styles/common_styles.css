@@ -1,0 +1,16 @@
+.label,
+.text-input,
+.button,
+.radio-button,
+.check-box,
+.combo-box,
+.tab-pane,
+.accordion {
+    -fx-font-size: 15px;
+    -fx-font-family: "Segoe UI Semibold";
+    -fx-text-fill: linear-gradient(#8b0000, #000000);
+}
+
+.default-insets {
+
+}
