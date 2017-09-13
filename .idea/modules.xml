@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/InformationSecurity.iml" filepath="$PROJECT_DIR$/.idea/InformationSecurity.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/InformationSecurity.iml" filepath="$PROJECT_DIR$/.idea/modules/InformationSecurity.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/InformationSecurity_main.iml" filepath="$PROJECT_DIR$/.idea/modules/InformationSecurity_main.iml" group="InformationSecurity" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/InformationSecurity_test.iml" filepath="$PROJECT_DIR$/.idea/modules/InformationSecurity_test.iml" group="InformationSecurity" />
     </modules>

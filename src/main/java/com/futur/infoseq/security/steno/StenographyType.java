@@ -4,6 +4,7 @@ import com.futur.infoseq.security.steno.binary.BinaryForFile;
 import com.futur.infoseq.security.steno.binary.BinaryForString;
 import com.futur.infoseq.security.steno.exif.ExifForFile;
 import com.futur.infoseq.security.steno.exif.ExifForString;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -40,6 +41,7 @@ public enum StenographyType {
     }
 
     @NotNull
+    @Contract(pure = true)
     @Override
     public String toString() {
         return label;

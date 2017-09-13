@@ -15,6 +15,7 @@
             <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES"/>
             <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES"/>
             <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES"/>
+            <RowConstraints maxHeight="-Infinity" vgrow="SOMETIMES"/>
         </rowConstraints>
         <Label text="Контейнер"/>
         <Label text="Путь" GridPane.rowIndex="1"/>
@@ -25,13 +26,15 @@
         <Button onAction="#destinationPath_B_action" text="..." GridPane.columnIndex="2" GridPane.rowIndex="1"/>
         <ComboBox fx:id="type_CB" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                   GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="Данные" GridPane.rowIndex="3"/>
+        <ComboBox fx:id="data_CB" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
     </GridPane>
     <Accordion fx:id="processingTypeSelector_A" VBox.vgrow="ALWAYS">
         <panes>
-            <TitledPane animated="false" text="Текст">
+            <TitledPane text="Текст">
                 <TextArea fx:id="processingText_TA" wrapText="true"/>
             </TitledPane>
-            <TitledPane animated="false" text="Файл">
+            <TitledPane text="Файл">
                 <GridPane hgap="5.0" maxHeight="1.7976931348623157E308" vgap="5.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity"/>

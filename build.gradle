@@ -1,7 +1,7 @@
 apply plugin: 'application'
 
 description = "Information Security Project"
-mainClassName = "StartApplication"
+mainClassName = "com.futur.infoseq.StartApplication"
 
 applicationDefaultJvmArgs += ["-Xms512m",
                               "-Xmx1024m",
@@ -30,6 +30,7 @@ allprojects {
 
     repositories {
         maven { url 'https://jitpack.io' }
+        maven { url 'http://repo1.maven.org/maven2' }
     }
 }
 
@@ -42,8 +43,9 @@ repositories {
 dependencies {
     compileOnly 'org.projectlombok:lombok:1.16.18'
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile 'junit:junit:4.12'
     compile 'org.jetbrains:annotations:15.0'
+    compile 'org.controlsfx:controlsfx:8.40.13'
     compile 'org.apache.commons:commons-imaging:1.0-SNAPSHOT'
 
     compile('com.github.alexm4q:futurutils:master-SNAPSHOT') { changing = true }
