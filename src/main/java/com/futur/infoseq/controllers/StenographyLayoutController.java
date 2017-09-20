@@ -26,7 +26,7 @@ public final class StenographyLayoutController extends BaseController {
     @NotNull
     private final FileChooser fileChooser;
     @NotNull
-    private final DirectoryChooser directoryChooser; // todo use it
+    private final DirectoryChooser directoryChooser;
     @NotNull
     private final ValidationSupport validation;
 
@@ -119,13 +119,7 @@ public final class StenographyLayoutController extends BaseController {
     }
 
     private void fixFilePathValidationRequire() {
-        // todo release it!
-        switch (data_CB.getSelectionModel().getSelectedItem()) {
-            case STRING:
-                break;
-            case FILE:
-                break;
-        }
+        ValidationSupport.setRequired(filePath_TF, data_CB.getSelectionModel().getSelectedItem() == DataType.FILE);
     }
 
     @FXML
@@ -137,9 +131,15 @@ public final class StenographyLayoutController extends BaseController {
 
     @FXML
     private void destinationPath_B_action() {
-        DevelopmentHelper.ifNotNull(fileChooser.showOpenDialog(null), file -> {
-            destinationPath_TF.setText(file.getAbsolutePath());
-        });
+        if (type_CB.getSelectionModel().getSelectedItem() == StenographyType.EXIF) {
+            DevelopmentHelper.ifNotNull(directoryChooser.showDialog(null), file -> {
+                destinationPath_TF.setText(file.getAbsolutePath());
+            });
+        } else {
+            DevelopmentHelper.ifNotNull(fileChooser.showOpenDialog(null), file -> {
+                destinationPath_TF.setText(file.getAbsolutePath());
+            });
+        }
     }
 
     @FXML
