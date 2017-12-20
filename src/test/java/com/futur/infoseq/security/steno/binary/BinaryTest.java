@@ -13,7 +13,7 @@ public final class BinaryTest {
     @Test
     public void encodeDecodeTest() throws Throwable {
         @NotNull final URL containerUrl = ResourcesHelper.getInternalUrl("white.jpg");
-        @NotNull final URL destinationUrl = ResourcesHelper.getInternalUrl("output.png");
+        @NotNull final URL destinationUrl = ResourcesHelper.getInternalUrl("path.png");
 
         @NotNull final File container = new File(containerUrl.getPath());
         @NotNull final File destination = new File(destinationUrl.getPath());

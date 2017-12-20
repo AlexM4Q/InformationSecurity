@@ -15,10 +15,11 @@ import java.io.File;
 import java.io.IOException;
 
 @SuppressWarnings("UnusedReturnValue")
-abstract class Binary<I> extends StenoGraph<I> {
+public abstract class Binary<I> extends StenoGraph<I> {
 
     @Getter
-    private short bytesCount = 5;
+    @Setter
+    private int bytesCount = 8;
 
     protected Binary(@NotNull final File container, @NotNull final File destination) {
         super(container, destination);
@@ -27,7 +28,7 @@ abstract class Binary<I> extends StenoGraph<I> {
     @NotNull
     protected byte[] read() throws IOException {
         @NotNull final BufferedImage image = getUserSpace(ImageIO.read(destination));
-        @NotNull final byte[] byteData = getByteData(image);
+        @NotNull final byte[] byteData = getBytes(image);
 
         return decodeBytes(byteData);
     }
@@ -40,7 +41,7 @@ abstract class Binary<I> extends StenoGraph<I> {
     }
 
     private void setBytes(@NotNull final BufferedImage image, @NotNull final byte[] bytes) {
-        @NotNull final byte imageBytes[] = getByteData(image);
+        @NotNull final byte imageBytes[] = getBytes(image);
         @NotNull final byte lengthBytes[] = bitConversion(bytes.length);
 
         @NotNull final IntPair pointerOffset = new IntPair();
@@ -53,10 +54,10 @@ abstract class Binary<I> extends StenoGraph<I> {
     }
 
     /**
-     * Creates a user space version of a Buffered Image, for editing and saving bytes
+     * Создает версию пользовательской картинки Buffered Image, для редактирования и соханения байтов
      *
-     * @param image The image to put into user space, removes compression interferences
-     * @return The user space version of the supplied image
+     * @param image Картинки
+     * @return Версия картинки с пользовательским пространством
      */
     @NotNull
     @Contract(pure = true)
@@ -71,16 +72,14 @@ abstract class Binary<I> extends StenoGraph<I> {
     }
 
     /**
-     * Gets the byte array of an image
+     * Выносит массив байтов картинки
      *
-     * @param image The image to get byte data from
-     * @return Returns the byte array of the image supplied
-     * @see WritableRaster
-     * @see DataBufferByte
+     * @param image Картинка
+     * @return Массив байтов картинки
      */
     @NotNull
     @Contract(pure = true)
-    private static byte[] getByteData(@NotNull final BufferedImage image) {
+    private static byte[] getBytes(@NotNull final BufferedImage image) {
         @NotNull final WritableRaster raster = image.getRaster();
         @NotNull final DataBufferByte buffer = (DataBufferByte) raster.getDataBuffer();
         return buffer.getData();
@@ -95,12 +94,12 @@ abstract class Binary<I> extends StenoGraph<I> {
     @NotNull
     @Contract(pure = true)
     private static byte[] bitConversion(final int i) {
-        final byte byte3 = (byte) ((i & 0xFF000000) >>> 24);
-        final byte byte2 = (byte) ((i & 0x00FF0000) >>> 16);
-        final byte byte1 = (byte) ((i & 0x0000FF00) >>> 8);
-        final byte byte0 = (byte) ((i & 0x000000FF));
-
-        return new byte[]{byte3, byte2, byte1, byte0};
+        return new byte[]{
+                (byte) ((i & 0xFF000000) >>> 24),
+                (byte) ((i & 0x00FF0000) >>> 16),
+                (byte) ((i & 0x0000FF00) >>> 8),
+                (byte) ((i & 0x000000FF))
+        };
     }
 
     /**

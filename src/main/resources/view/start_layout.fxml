@@ -3,32 +3,33 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.BorderPane?>
 <?import java.net.URL?>
-<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.futur.infoseq.controllers.StartLayoutController">
-    <top>
-        <MenuBar BorderPane.alignment="CENTER">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" text="Close" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-                <MenuItem mnemonicParsing="false" text="Delete" />
-            </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" text="About" />
-            </Menu>
-        </MenuBar>
-    </top>
-    <center>
-        <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
-            <Tab closable="false" text="Криптография">
-                <fx:include source="cryptography_layout.fxml" />
-            </Tab>
-            <Tab closable="false" text="Стеганография">
-                <fx:include source="stenography_layout.fxml" />
-            </Tab>
-        </TabPane>
-    </center>
-   <stylesheets>
-      <URL value="@../styles/common_styles.css" />
-      <URL value="@../styles/menu_styles.css" />
-   </stylesheets>
+<BorderPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.futur.infoseq.controllers.StartLayoutController">
+  <top>
+    <MenuBar BorderPane.alignment="CENTER">
+      <Menu mnemonicParsing="false" text="Файл">
+        <MenuItem mnemonicParsing="false" text="Close"/>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Инструменты">
+        <MenuItem mnemonicParsing="false" text="Delete"/>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Помощь">
+        <MenuItem mnemonicParsing="false" text="About"/>
+      </Menu>
+    </MenuBar>
+  </top>
+  <center>
+    <TabPane tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <!--<Tab closable="false" text="Криптография">-->
+      <!--<fx:include source="cryptography_layout.fxml" />-->
+      <!--</Tab>-->
+      <Tab closable="false" text="Стеганография">
+        <fx:include source="stenography_layout.fxml"/>
+      </Tab>
+    </TabPane>
+  </center>
+  <stylesheets>
+    <URL value="@../styles/common_styles.css"/>
+    <URL value="@../styles/menu_styles.css"/>
+  </stylesheets>
 </BorderPane>

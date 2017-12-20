@@ -3,6 +3,8 @@ package com.futur.infoseq.controllers;
 import com.futur.common.helpers.DevelopmentHelper;
 import com.futur.infoseq.security.DataType;
 import com.futur.infoseq.security.steno.StenographyType;
+import com.futur.infoseq.security.steno.binary.Binary;
+import com.futur.ui.FormatterHelper;
 import javafx.fxml.FXML;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.ComboBox;
@@ -10,6 +12,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import lombok.val;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.ValidationResult;
 import org.controlsfx.validation.ValidationSupport;
@@ -37,6 +40,8 @@ public final class StenographyLayoutController extends BaseController {
     @FXML
     private ComboBox<StenographyType> type_CB;
     @FXML
+    private TextField bitsCount_TF;
+    @FXML
     private ComboBox<DataType> data_CB;
     @FXML
     private TextField filePath_TF;
@@ -55,6 +60,8 @@ public final class StenographyLayoutController extends BaseController {
     public void initialize(@NotNull final URL location, @Nullable final ResourceBundle resources) {
         type_CB.getItems().addAll(StenographyType.values());
         data_CB.getItems().addAll(DataType.values());
+
+        FormatterHelper.applyIntegerFormat(bitsCount_TF);
 
         validation.setErrorDecorationEnabled(false);
         validation.registerValidator(containerPath_TF, (c, value) -> {
@@ -102,6 +109,7 @@ public final class StenographyLayoutController extends BaseController {
             return ValidationResult.fromMessageIf(c, "Путь должен указывать на файл", Severity.ERROR, !condition);
         });
 
+        type_CB.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> bitsCount_TF.setDisable(newValue != StenographyType.BINARY));
         data_CB.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             final int index = newValue.intValue();
             if (0 <= index && index < processingTypeSelector_A.getPanes().size()) {
@@ -161,10 +169,18 @@ public final class StenographyLayoutController extends BaseController {
             @NotNull final StenographyType type = type_CB.getSelectionModel().getSelectedItem();
             switch (data_CB.getSelectionModel().getSelectedItem()) {
                 case STRING:
-                    processingText_TA.setText(type.initializeForString(container, destination).decode(new File[0]));
+                    @NotNull val stringStenoGraph = type.initializeForString(container, destination);
+                    if (type == StenographyType.BINARY) {
+                        FormatterHelper.getIntegerNumeric(bitsCount_TF, ((Binary) stringStenoGraph)::setBytesCount);
+                    }
+                    processingText_TA.setText(stringStenoGraph.decode(new File[0]));
                     break;
                 case FILE:
-                    type.initializeForFile(container, destination).decode(new File[0]);
+                    @NotNull val fileStenoGraph = type.initializeForFile(container, destination);
+                    if (type == StenographyType.BINARY) {
+                        FormatterHelper.getIntegerNumeric(bitsCount_TF, ((Binary) fileStenoGraph)::setBytesCount);
+                    }
+                    fileStenoGraph.decode(new File[0]);
                     break;
             }
         }
@@ -182,10 +198,18 @@ public final class StenographyLayoutController extends BaseController {
             @NotNull final StenographyType type = type_CB.getSelectionModel().getSelectedItem();
             switch (data_CB.getSelectionModel().getSelectedItem()) {
                 case STRING:
-                    type.initializeForString(container, destination).encode(processingText_TA.getText());
+                    @NotNull val stringStenoGraph = type.initializeForString(container, destination);
+                    if (type == StenographyType.BINARY) {
+                        FormatterHelper.getIntegerNumeric(bitsCount_TF, ((Binary) stringStenoGraph)::setBytesCount);
+                    }
+                    stringStenoGraph.encode(processingText_TA.getText());
                     break;
                 case FILE:
-                    type.initializeForFile(container, destination).encode(new File(filePath_TF.getText()));
+                    @NotNull val fileStenoGraph = type.initializeForFile(container, destination);
+                    if (type == StenographyType.BINARY) {
+                        FormatterHelper.getIntegerNumeric(bitsCount_TF, ((Binary) fileStenoGraph)::setBytesCount);
+                    }
+                    fileStenoGraph.encode(new File(filePath_TF.getText()));
                     break;
             }
         }
